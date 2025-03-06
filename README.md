@@ -51,12 +51,22 @@ If you have any questions feel free to reach out to me, Peter Hahm, at hahmp@uwp
 DOMINIC DE LA CERDA - 3/5/25
 
 -- CONTINUED WORK --
-In addition to the TCP handshake, two more upper layer connections must be made: a COTP connect request
-and an MMS associate request. Both connection requests can be spoofed byte-for-byte from the captured 
-packets and require no modifications for the purposes of this attack. The trip packet consists of two 
-separate MMS set data value request packets sent in sequence. Two packets are required because tripping
-the breaker is a "select before operate" command, meaning the first packet is a select statement and
-the second statement is the trip operation. The two packets are not the exact same as they have different
-item IDs and invoke IDs. Each set data value request requires a UTC timestamp with precision in the 
-nanoseconds in order for object access to be granted. A program to spoof each requests' timestamp was 
-configured and the attack was able to successfully trip the REF615 breaker.
+In addition to the TCP handshake, two more upper layer connections must be made: a COTP connect 
+request and an MMS associate request. Both connection requests can be spoofed byte-for-byte from
+the captured packets and require no modifications for the purposes of this attack. The trip packet
+consists of two separate MMS set data value request packets sent in sequence. Two packets are required
+because tripping the breaker is a "select before operate" command, meaning the first packet is a 
+select statement and the second packet is the trip operation. The two packets are not the exact same
+as they have different item IDs and invoke IDs. Each set data value request requires a UTC timestamp
+with precision in the nanoseconds in order for object access to be granted. A program to spoof each
+requests' timestamp was configured and the attack was able to successfully trip the REF615 breaker.
+
+-- FILES --
+mms_trip_success.pcapng
+	> The Wireshark capture of the full attack, consisting of the TCP three-way handshake, the
+	> COTP connect request and response, the MMS associate request and response, the two MMS
+ 	> set data value requests and their responses, and the unconfirmed command termination
+  	> response indicating a successful trip.
+MMS_Replay_Finished.py
+	> The Python program to perform the full attack. IP addresses for the attacker and the
+ 	> server can be modified as needed.
